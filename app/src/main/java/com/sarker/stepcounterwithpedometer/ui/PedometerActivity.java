@@ -1,4 +1,4 @@
-package com.sarker.stepcounterwithpedometer;
+package com.sarker.stepcounterwithpedometer.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sarker.stepcounterwithpedometer.R;
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
 
