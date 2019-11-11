@@ -15,17 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sarker.stepcounterwithpedometer.R;
+import com.sarker.stepcounterwithpedometer.adapter.StepCountAdapter;
 
 
 public class PedometerListActivity extends AppCompatActivity {
     private RecyclerView mSensorListView;
     private TextView tvStepsCount;
+    private StepCountAdapter mListAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer_list);
+        mSensorListView = findViewById(R.id.recycler_view);
         tvStepsCount = findViewById(R.id.tv_steps_count);
 //        mSensorListView = findViewById(R.id.recycler_view);
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -46,4 +49,7 @@ public class PedometerListActivity extends AppCompatActivity {
             }
         }
     };
-}
+
+
+    }
+

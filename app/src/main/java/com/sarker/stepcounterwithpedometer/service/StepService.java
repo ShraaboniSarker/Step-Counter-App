@@ -14,6 +14,11 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.os.IBinder;
+
+import androidx.annotation.Nullable;
+
+
 public class StepService extends Service implements SensorEventListener {
 
     private SensorManager mSensorManager;
@@ -47,7 +52,9 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
        // mStepsDBHelper.createStepsEntry();   //database method to save step count data
+
         sendMessageToActivity(event,"step_count");
+
 
     }
 
@@ -55,6 +62,7 @@ public class StepService extends Service implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     private void sendMessageToActivity(SensorEvent event, String msg) {
         Intent intent = new Intent("StepsCountHistory");
         // You can also include some extra data.
@@ -64,4 +72,5 @@ public class StepService extends Service implements SensorEventListener {
         intent.putExtra("Steps", b);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
 }
