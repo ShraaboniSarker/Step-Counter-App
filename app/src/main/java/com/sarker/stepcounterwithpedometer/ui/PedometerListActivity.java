@@ -16,36 +16,39 @@ import android.widget.Toast;
 
 import com.sarker.stepcounterwithpedometer.R;
 import com.sarker.stepcounterwithpedometer.adapter.StepCountAdapter;
+import com.sarker.stepcounterwithpedometer.service.StepService;
 
 
 public class PedometerListActivity extends AppCompatActivity {
     private RecyclerView mSensorListView;
     private TextView tvStepsCount;
     private StepCountAdapter mListAdapter;
-
+    float steps = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer_list);
-        mSensorListView = findViewById(R.id.recycler_view);
         tvStepsCount = findViewById(R.id.tv_steps_count);
+        Intent mStepsIntent = new Intent(getApplicationContext(), StepService.class);
+        startService(mStepsIntent);
 //        mSensorListView = findViewById(R.id.recycler_view);
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver, new IntentFilter("StepsCountHistory"));
     }
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        private SensorEvent steps;
+
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String message = intent.getStringExtra("Status");
-            Bundle b = intent.getBundleExtra("Steps");
-            steps =  b.getParcelable("Steps");
-            if (steps != null) {
-                tvStepsCount.setText(String.valueOf(steps.values[0]));
-                Toast.makeText(context, String.valueOf(steps.values[0]), Toast.LENGTH_SHORT).show();
+            String action = intent.getAction();
+
+            float stepCount = intent.getFloatExtra("Status",0);
+
+            if (stepCount != 0.0) {
+                steps = steps+stepCount;
+                tvStepsCount.setText(String.valueOf(steps));
+                Toast.makeText(context, String.valueOf(steps), Toast.LENGTH_SHORT).show();
             }
         }
     };

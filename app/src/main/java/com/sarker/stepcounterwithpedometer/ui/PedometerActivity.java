@@ -32,7 +32,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
                 != null)
         {
             mSensor =
-                    mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+                    mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
             isSensorPresent = true;
             Toast.makeText(this, "Sensor available", Toast.LENGTH_SHORT).show();
         }

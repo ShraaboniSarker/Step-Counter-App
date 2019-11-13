@@ -23,6 +23,7 @@ public class StepService extends Service implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mStepDetectorSensor;
+    int step = 0;
 
     @Nullable
     @Override
@@ -33,19 +34,12 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        mSensorManager = (SensorManager)
-                this.getSystemService(Context.SENSOR_SERVICE);
-        if(mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null)
-        {
-            mStepDetectorSensor =
-                    mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-            mSensorManager.registerListener(this, mStepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        registerSensor();
         return Service.START_STICKY;
     }
 
@@ -53,7 +47,7 @@ public class StepService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
        // mStepsDBHelper.createStepsEntry();   //database method to save step count data
 
-        sendMessageToActivity(event,"step_count");
+        sendMessageToActivity(event,event.values[0]);
 
 
     }
@@ -63,14 +57,22 @@ public class StepService extends Service implements SensorEventListener {
 
     }
 
-    private void sendMessageToActivity(SensorEvent event, String msg) {
+    private void sendMessageToActivity(SensorEvent event, float msg) {
         Intent intent = new Intent("StepsCountHistory");
-        // You can also include some extra data.
         intent.putExtra("Status", msg);
-        Bundle b = new Bundle();
-        b.putParcelable("Steps", (Parcelable) event);
-        intent.putExtra("Steps", b);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    public void registerSensor(){
+        mSensorManager = (SensorManager)
+                this.getSystemService(Context.SENSOR_SERVICE);
+        if(mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null)
+        {
+            mStepDetectorSensor =
+                    mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            mSensorManager.registerListener(this, mStepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        }
+    }
 }
